@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "pdbqc"
-version = "0.1.0"
+version = "0.1.1"
 description = "Structure quality report and cleaning for PDB/mmCIF files"
 readme = "README.md"
 requires-python = ">=3.9"
@@ -13,6 +13,9 @@ dependencies = [
     "numpy",
     "rich",
 ]
+
+[project.urls]
+Homepage = "https://github.com/abhinav-sathamraju-venkata/pdbqc"
 
 [project.scripts]
 pdbqc = "pdbqc.cli:main"
