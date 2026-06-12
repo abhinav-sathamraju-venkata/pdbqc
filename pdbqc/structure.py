@@ -52,21 +52,23 @@ def clean_structure (path, keep_ligands = False, cif_path = ""):
 
     #Step 6: Find missing residues
     if cif_path != "":
-        import biotite.structure.io.pdbx as pdbx
-        cif_file = pdbx.CIFFile.read(cif_path)
-        seqres = pdbx.get_sequence(cif_file)
-        missing = {}
-        coverage = {}
-        all_chain_ids = np.unique(structure.chain_id)
-
-        for chain_id in all_chain_ids:
-            if chain_id in seqres:
-                ca_atoms = structure[(structure.atom_name == "CA") & (structure.chain_id == chain_id)]    
-                n_observed = len(ca_atoms)
-                n_expected = len(seqres[chain_id])
-                missing[chain_id] = n_expected - n_observed
-                coverage[chain_id] = round(n_observed / n_expected * 100, 1) if n_expected > 0 else 0.0
-                       
+        try:
+            import biotite.structure.io.pdbx as pdbx
+            cif_file = pdbx.CIFFile.read(cif_path)
+            seqres = pdbx.get_sequence(cif_file)
+            missing = {}
+            coverage = {}
+            all_chain_ids = np.unique(structure.chain_id)
+            for chain_id in all_chain_ids:
+                if chain_id in seqres:
+                    ca_atoms = structure[(structure.atom_name == "CA") & (structure.chain_id == chain_id)]
+                    n_observed = len(ca_atoms)
+                    n_expected = len(seqres[chain_id])
+                    missing[chain_id] = n_expected - n_observed
+                    coverage[chain_id] = round(n_observed / n_expected * 100, 1) if n_expected > 0 else 0.0
+        except (KeyError, Exception):
+            missing = {}
+            coverage = {}
     else:
         missing = {}
         coverage = {}
